@@ -1,30 +1,18 @@
 import React, { Component } from 'react';
+import transformWeather from './../../services/transformWeather';
+import { api_weather } from '../../constants/api_url';
 import Location from './Location';
 import WeatherData from './WeatherData';
 import './styles.css';
 import {
-    SUN,
-    WINDY, 
+    SUN, 
 } from './../../constants/weathers';
-
-const location = "Mexico City,mx";
-const api_key = "977c7398831d8f4f85665097c45dd25e";
-const url_base_weather = "http://api.openweathermap.org/data/2.5/weather";
-
-const api_weather = `${url_base_weather}?q=${location}&appid=${api_key}`;
 
 const data = {
     temperature: 5,
     weatherState: SUN,
     humidity: 10,
     wind: '10 m/s',
-}
-
-const data2 = {
-    temperature: 21,
-    weatherState: WINDY,
-    humidity: 6,
-    wind: '20 m/s',
 }
 
 class WeatherLocation extends Component {
@@ -34,30 +22,43 @@ class WeatherLocation extends Component {
         this.state = {
             city: 'Ciudad de México',
             data: data,
-        }
+        };
+        console.log("constructor");
     }
 
-    getData = weather_data => {
-        const { humidity, temp } = weather_data.main;
-        const { speed } = weather_data.wind;
-        
+    componentDidMount() {
+        console.log("componentDidMount");        
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        console.log("componentDidUpdate");      
+    }
+    
+    
+    componentWillMount() {
+        console.log("UNSAFE componentWillMount");        
+    }
+
+    componentWillUpdate() {
+        console.log("UNSAFE componentWillUpdate");
+    }
+    
     handleUpdateClick = () => {
         fetch(api_weather).then( resolve => {
             return resolve.json();
         }).then(data => {
-            console.log(data);
+            const newWeather = transformWeather(data);
+            console.log(newWeather);
             debugger;
-        });
-
-        console.log("actualizado!!");
-        this.setState({
-            city: 'Guadalajara',
-            data: data2,
+            this.setState({
+                data: newWeather,
+            })
         });
     }
 
     render(){
+        console.log("render");
+
         const {city, data} = this.state;
 
         return(
